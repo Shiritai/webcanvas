@@ -1,0 +1,17 @@
+{
+	"name": "webcanvas",
+	"version": "1.0.0",
+	"description": "Assignment 1 of NTHU Software Studio 2023 (Spring)",
+	"main": "index.js",
+	"type": "commonjs",
+	"scripts": {
+		"test": "make",
+		"start": "webcanvas"
+	},
+	"keywords": [
+		"web",
+		"canvas"
+	],
+	"author": "Shiritai",
+	"license": "ISC"
+}
