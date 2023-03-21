@@ -1,0 +1,103 @@
+body {
+    background-color: lightblue;
+}
+
+h1 {
+    font-family: 'Fira Code';
+}
+
+.img_cover {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.btn-circle.btn-xl {
+    margin: 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+}
+
+#canvas {
+    border-style: solid;
+    border-width: medium;
+    background-color: white;
+}
+
+.button-hstack {
+    border-width: medium;
+}
+
+.btn-outline-danger {
+    border-color: black;
+}
+
+.btn-color.btn-xl {
+    border-radius: 40px;
+    background-color: blueviolet; /* just for debugging */
+}
+
+.form-control.form-control-color {
+    width: 50px;
+    height: 50px;
+    padding: 4px;
+    border-radius: 10px;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.btn-brush.btn-xl {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: darkcyan; /* just for debugging */
+}
+
+.cursor-none {
+    cursor: auto;
+}
+
+.cursor-pencil {
+    cursor: url('../img/small/pencil.svg'), auto;
+}
+
+.cursor-eraser {
+    cursor: url('../img/small/eraser.svg'), auto;
+}
+
+.cursor-textbox {
+    cursor: text;
+}
+
+.cursor-line {
+    cursor: url('../img/small/line.svg'), auto;
+}
+
+.cursor-circle_void {
+    cursor: url('../img/small/circle_void.svg'), auto;
+}
+
+.cursor-circle_solid {
+    cursor: url('../img/small/circle_solid.svg'), auto;
+}
+
+.cursor-triangle_void {
+    cursor: url('../img/small/triangle_void.svg'), auto;
+}
+
+.cursor-triangle_solid {
+    cursor: url('../img/small/triangle_solid.svg'), auto;
+}
+
+.cursor-rectangle_void {
+    cursor: url('../img/small/rectangle_void.svg'), auto;
+}
+
+.cursor-rectangle_solid {
+    cursor: url('../img/small/rectangle_solid.svg'), auto;
+}
+
+.cursor-rectangle_solid {
+    cursor: url('../img/small/rectangle_solid.svg'), auto;
+}
