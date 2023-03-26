@@ -53,7 +53,7 @@
 
 ![dual](./report/img/dual_mode.png)
 
-如上圖，單擊可選擇使用圓、三角或方形功能，與其他功能相同，被選擇的功能之按鈕會被標記為紅色。若在被標記的情況下再次點擊圓、三角或方形功能，便會切換顯實圖示，實心變空心、空心變實心。滑鼠的圖案亦與該圖示同步。
+如上圖，單擊可選擇使用圓、三角或方形功能，與其他功能相同，被選擇的功能之按鈕會被標記為紅色。若在被標記的情況下再次點擊圓、三角或方形功能，便會切換顯示圖示，實心變空心、空心變實心。滑鼠的圖案亦與該圖示同步。
 
 ### 透明度控制
 
@@ -65,8 +65,9 @@
 
 若已經無可以還原 / 重做的步驟，會跳出提示
 
-![no_undo](report/img/no_undo.png)
-![no_redo](report/img/no_redo.png)
+|no undo|no redo|
+|:-:|:-:|
+|![no_undo](report/img/no_undo.png)|![no_redo](report/img/no_redo.png)|
 
 ## Web page link
 
@@ -115,11 +116,11 @@ graph LR;
 
 * pencil
 
-    於 `drawScratch` 中使用 `board::lineTo` 決定繪圖點，並在 `drawUp` 正式以 `board::stroke` 的方式劃下。
+    於 `drawScratch` 中使用 `board::lineTo` 決定繪圖點，並在 `drawUp` 正式以 `board::stroke` 方法繪圖。
 
 * eraser
 
-    近乎等同 pencil，於 `drawScratch` 中使用 `board::lineTo` 決定繪圖點，並在 `drawUp` 正式以 `board::stroke` 的方式劃下。差別在設定 `board::globalCompositeOperation` 為 "destination-out" 以開啟清除模式。
+    近乎等同 pencil，於 `drawScratch` 中使用 `board::lineTo` 決定繪圖點，並在 `drawUp` 正式以 `board::stroke` 方法繪圖。差別在設定 `board::globalCompositeOperation` 為 "destination-out" 以開啟清除模式。
 * textbox
 
     較特別，非與打字同步的方式繪製，而是先建立一 `<input>` 蒐集文字輸入，之後刪除該 `<input>`，並將文字以 `board::fillText` 的方式繪製。注意由於此操作發生在按下 `Enter` 或游標移開輸入方格時，故應該在這兩種情況發生時呼叫 `beforeDraw`  和 `afterDraw`，對此我以 `check_and_destroy` 函子完成實作。
