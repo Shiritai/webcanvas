@@ -12,13 +12,13 @@ class ColorMethod {
             let cs = document.createElement("label");
             cs.classList.add("form-control", "form-control-color");
             cs.id = `color${i}`;
-            cs.style.borderWidth = "3px";
+            cs.style.borderWidth = "2px";
             cs.onmouseenter = () => {
                 cs.style.borderColor = "black";
             };
             cs.onmouseleave = () => {
                 cs.style.borderColor = i != this.cur ?
-                    "transparent" : "orange";
+                    "gray" : "orange";
             };
             cs.onclick = (ev) => {
                 if (this.cur != i || ref.classList.contains('show')) {
@@ -31,7 +31,7 @@ class ColorMethod {
                     ref.classList.add('show');
                 }
                 this.color_arr.forEach((_cs) => {
-                    _cs.style.borderColor = "transparent";
+                    _cs.style.borderColor = "gray";
                 });
                 cs.style.borderColor = "orange";
                 this.cur = i;
@@ -280,7 +280,7 @@ function loadHtmlElements() {
 }
 function initializeWidget() {
     // set brush
-    brush_sz.value = "5";
+    brush_sz.value = "4";
     (brush_sz.onmousemove = () => {
         brush_sz_txt.innerText = `Brush:${'\xa0'.repeat(3 - brush_sz.value.length)}${brush_sz.value}px`;
     })();
@@ -430,9 +430,6 @@ function drawScratch(pageX, pageY) {
     // cancel possible erase mode
     board.globalCompositeOperation = "source-over";
     let cur_x = pageX - canvas.offsetLeft, cur_y = pageY - canvas.offsetTop;
-    /**
-     * routine 1: before drawing
-     */
     switch (mode) {
         case eraser.id:
             // set erase mode
@@ -453,7 +450,6 @@ function drawScratch(pageX, pageY) {
         default: // for shapes
             board.putImageData(img_data, 0, 0);
             board.beginPath();
-            board.lineCap = 'butt';
             switch (mode) {
                 case line.id:
                     board.moveTo(start_x, start_y);
@@ -469,6 +465,7 @@ function drawScratch(pageX, pageY) {
                     board.lineTo(start_x, cur_y);
                     board.lineTo((cur_x + start_x) / 2, start_y);
                     board.lineTo(cur_x, cur_y);
+                    board.lineTo(start_x, cur_y);
                     break;
                 case rectangle.id:
                     board.rect(start_x, start_y, cur_x - start_x, cur_y - start_y);
@@ -569,4 +566,5 @@ window.onload = () => {
     canvasSetup();
     setOnclickEvent();
     mode = 'none'; // mode: tool which is using
+    color_method.assign('127', '127', '127');
 };
