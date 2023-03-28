@@ -339,6 +339,8 @@ function loadHtmlElements(): void
             new MultipleShape(l.getElementsByTagName('img'), 2));
     });
 
+    font.onchange = () => { font.value; } // make selector load selected value
+
     // initialize mutex for input text
     mutex = new Mutex.Mutex();
 }
