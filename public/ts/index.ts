@@ -482,15 +482,15 @@ function setOnclickEvent(): void {
  * @param pageX page x coordinate
  * @param pageY page y coordinate
  */
-function initDraw(pageX: number, pageY: number): void {
+function initDraw(ev: MouseEvent): void {
     if (!drawing) {
         // enable drawing
         drawing = true;
         // cache old canvas for drawing shapes (line, circle, ...)
         img_data = board.getImageData(0, 0, canvas.width, canvas.height);
         // record starting position
-        start_x = pageX - canvas.offsetLeft;
-        start_y = pageY - canvas.offsetTop;
+        start_x = ev.pageX - canvas.offsetLeft;
+        start_y = ev.pageY - canvas.offsetTop;
     }
 }
 
@@ -510,11 +510,11 @@ function beforeDraw(): void {
  * @param pageX current page x coordinate
  * @param pageY current page y coordinate
  */
-function drawScratch(pageX: number, pageY: number): void {
+function drawScratch(ev: MouseEvent): void {
     // cancel possible erase mode
     board.globalCompositeOperation = "source-over";
-    let cur_x = pageX - canvas.offsetLeft,
-        cur_y = pageY - canvas.offsetTop;
+    let cur_x = ev.pageX - canvas.offsetLeft,
+        cur_y = ev.pageY - canvas.offsetTop;
     switch (mode) {
     case eraser.id:
         // set erase mode
@@ -584,12 +584,12 @@ function afterDraw(): void {
  * @param pageX page x coordinate
  * @param pageY page y coordinate
  */
-function setupTextInput(pageX: number, pageY: number): void {
+function setupTextInput(ev: MouseEvent): void {
     let input = document.createElement('input');
     input.type = 'text';
     input.style.position = 'absolute';
-    input.style.left = `${pageX}px`;
-    input.style.top = `${pageY}px`;
+    input.style.left = `${ev.pageX}px`;
+    input.style.top = `${ev.pageY}px`;
 
     const check_and_destroy = () => {
         if (input.value != null && input.value !== '') {
@@ -625,7 +625,7 @@ function canvasSetup(): void {
         if (ev.button != 0) { // not left button
             return;
         }
-        initDraw(ev.pageX, ev.pageY);
+        initDraw(ev);
         beforeDraw();
     };
 
@@ -633,7 +633,7 @@ function canvasSetup(): void {
         if (!drawing) {
             return;
         }
-        drawScratch(ev.pageX, ev.pageY);
+        drawScratch(ev);
         drawUp();
     };
 
@@ -645,7 +645,7 @@ function canvasSetup(): void {
             drawUp();
             afterDraw();
         } else {
-            setupTextInput(ev.pageX, ev.pageY);
+            setupTextInput(ev);
         }
     };
 }
