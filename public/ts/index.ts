@@ -519,6 +519,7 @@ function drawScratch(ev: MouseEvent): void {
     case eraser.id:
         // set erase mode
         board.globalCompositeOperation = "destination-out";
+        board.globalAlpha = 1.;
         // keep going
     case pencil.id:
         board.lineCap = 'round';
