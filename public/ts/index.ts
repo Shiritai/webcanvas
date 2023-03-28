@@ -40,10 +40,8 @@ class ColorMethod {
                     // assign
                     cs.style.backgroundColor = this._color(this.code_arr[i]);
                     [color_r.value, color_g.value, color_b.value] = this.code_arr[i];
-                    ref.classList.remove('show');
-                } else {
-                    ref.classList.add('show');
                 }
+                offcanvas_move(ref, this.cur == i);
                 this.color_arr.forEach((_cs) => {
                     _cs.style.borderColor = "gray";
                 });
@@ -56,6 +54,7 @@ class ColorMethod {
             stack.prepend(cs);
         }
         this.color_arr[0].onclick!(new MouseEvent("dummy")); // dummy triggering
+        ref.classList.remove('show');
     }
 
     assign(r: string, g: string, b: string): void {
@@ -257,12 +256,16 @@ var font_sz:      HTMLInputElement;
 var font:        HTMLSelectElement;
 var font_sz_txt:  HTMLLabelElement;
 
-/* function to show/hide offcanvas */
-function offcanvas_move(of: HTMLDivElement, show: boolean): void {
-    if (show) {
-        of.classList.add('show');
-    } else {
+/**
+ * Show/hide offcanvas
+ * move offcanvas based on status of offcanvas
+ * @param move whether we want to activate or move offcanvas
+ */
+function offcanvas_move(of: HTMLDivElement, move: boolean): void {
+    if (move && of.classList.contains('show')) {
         of.classList.remove('show');
+    } else {
+        of.classList.add('show');
     }
 }
 
