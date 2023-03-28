@@ -157,7 +157,6 @@ class Screenshot {
     }
 }
 
-/* tri-state */
 class MultipleShape {
     private shapes: HTMLCollectionOf<HTMLImageElement>;
     private total_state: number;
@@ -499,8 +498,7 @@ function initDraw(ev: MouseEvent): void {
  */
 function beforeDraw(): void {
     board.lineWidth = parseInt(brush_sz.value);
-    board.strokeStyle = color_method.color();
-    board.fillStyle = color_method.color();
+    board.strokeStyle = board.fillStyle = color_method.color();
     board.globalAlpha = parseFloat(trans_val.value) / 100;
     board.font = `${font_sz.value}px ${font.value}`;
 }

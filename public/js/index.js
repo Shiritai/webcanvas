@@ -25,11 +25,8 @@ class ColorMethod {
                     // assign
                     cs.style.backgroundColor = this._color(this.code_arr[i]);
                     [color_r.value, color_g.value, color_b.value] = this.code_arr[i];
-                    ref.classList.remove('show');
                 }
-                else {
-                    ref.classList.add('show');
-                }
+                offcanvas_move(ref, this.cur == i);
                 this.color_arr.forEach((_cs) => {
                     _cs.style.borderColor = "gray";
                 });
@@ -41,6 +38,7 @@ class ColorMethod {
             stack.prepend(cs);
         }
         this.color_arr[0].onclick(new MouseEvent("dummy")); // dummy triggering
+        ref.classList.remove('show');
     }
     assign(r, g, b) {
         this.code_arr[this.cur] = [r, g, b];
@@ -128,7 +126,6 @@ class Screenshot {
         this.shot();
     }
 }
-/* tri-state */
 class MultipleShape {
     constructor(shapes, total_state) {
         this.shapes = shapes;
@@ -211,13 +208,17 @@ var offcanvas_f;
 var font_sz;
 var font;
 var font_sz_txt;
-/* function to show/hide offcanvas */
-function offcanvas_move(of, show) {
-    if (show) {
-        of.classList.add('show');
+/**
+ * Show/hide offcanvas
+ * move offcanvas based on status of offcanvas
+ * @param move whether we want to activate or move offcanvas
+ */
+function offcanvas_move(of, move) {
+    if (move && of.classList.contains('show')) {
+        of.classList.remove('show');
     }
     else {
-        of.classList.remove('show');
+        of.classList.add('show');
     }
 }
 var mode;
@@ -269,12 +270,12 @@ function loadHtmlElements() {
     let rectangle_lb = document.getElementById("rectangle-container");
     tri_counter = new Map();
     shape_container = new Map();
-    let shapes = [[circle, circle_lb],
-        [triangle, triangle_lb], [rectangle, rectangle_lb]];
+    let shapes = [[circle, circle_lb], [triangle, triangle_lb], [rectangle, rectangle_lb]];
     shapes.forEach(([e, l]) => {
         tri_counter.set(e.id, { act: "none", sp: "void" });
         shape_container.set(e.id, new MultipleShape(l.getElementsByTagName('img'), 2));
     });
+    font.onchange = () => { font.value; };
     // initialize mutex for input text
     mutex = new Mutex.Mutex();
 }
@@ -400,15 +401,15 @@ function setOnclickEvent() {
  * @param pageX page x coordinate
  * @param pageY page y coordinate
  */
-function initDraw(pageX, pageY) {
+function initDraw(ev) {
     if (!drawing) {
         // enable drawing
         drawing = true;
         // cache old canvas for drawing shapes (line, circle, ...)
         img_data = board.getImageData(0, 0, canvas.width, canvas.height);
         // record starting position
-        start_x = pageX - canvas.offsetLeft;
-        start_y = pageY - canvas.offsetTop;
+        start_x = ev.pageX - canvas.offsetLeft;
+        start_y = ev.pageY - canvas.offsetTop;
     }
 }
 /**
@@ -416,8 +417,7 @@ function initDraw(pageX, pageY) {
  */
 function beforeDraw() {
     board.lineWidth = parseInt(brush_sz.value);
-    board.strokeStyle = color_method.color();
-    board.fillStyle = color_method.color();
+    board.strokeStyle = board.fillStyle = color_method.color();
     board.globalAlpha = parseFloat(trans_val.value) / 100;
     board.font = `${font_sz.value}px ${font.value}`;
 }
@@ -426,14 +426,15 @@ function beforeDraw() {
  * @param pageX current page x coordinate
  * @param pageY current page y coordinate
  */
-function drawScratch(pageX, pageY) {
+function drawScratch(ev) {
     // cancel possible erase mode
     board.globalCompositeOperation = "source-over";
-    let cur_x = pageX - canvas.offsetLeft, cur_y = pageY - canvas.offsetTop;
+    let cur_x = ev.pageX - canvas.offsetLeft, cur_y = ev.pageY - canvas.offsetTop;
     switch (mode) {
         case eraser.id:
             // set erase mode
             board.globalCompositeOperation = "destination-out";
+            board.globalAlpha = 1.;
         // keep going
         case pencil.id:
             board.lineCap = 'round';
@@ -499,12 +500,12 @@ function afterDraw() {
  * @param pageX page x coordinate
  * @param pageY page y coordinate
  */
-function setupTextInput(pageX, pageY) {
+function setupTextInput(ev) {
     let input = document.createElement('input');
     input.type = 'text';
     input.style.position = 'absolute';
-    input.style.left = `${pageX}px`;
-    input.style.top = `${pageY}px`;
+    input.style.left = `${ev.pageX}px`;
+    input.style.top = `${ev.pageY}px`;
     const check_and_destroy = () => {
         if (input.value != null && input.value !== '') {
             beforeDraw();
@@ -537,14 +538,14 @@ function canvasSetup() {
         if (ev.button != 0) { // not left button
             return;
         }
-        initDraw(ev.pageX, ev.pageY);
+        initDraw(ev);
         beforeDraw();
     };
     canvas.onmousemove = (ev) => {
         if (!drawing) {
             return;
         }
-        drawScratch(ev.pageX, ev.pageY);
+        drawScratch(ev);
         drawUp();
     };
     canvas.onmouseup = (ev) => {
@@ -556,7 +557,7 @@ function canvasSetup() {
             afterDraw();
         }
         else {
-            setupTextInput(ev.pageX, ev.pageY);
+            setupTextInput(ev);
         }
     };
 }
