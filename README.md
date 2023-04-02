@@ -39,6 +39,13 @@
 
 ![overview with setting](report/img/overview_setting.png)
 
+## Web page link
+
+> 以下兩者都行
+
+* [https://ss-assignment1-16e1b.firebaseapp.com/](https://ss-assignment1-16e1b.firebaseapp.com/)
+* [https://ss-assignment1-16e1b.web.app](https://ss-assignment1-16e1b.web.app)
+* 
 ## Bonus Function description
 
 ### 多重顏色選擇器
@@ -68,10 +75,6 @@
 |no undo|no redo|
 |:-:|:-:|
 |![no_undo](report/img/no_undo.png)|![no_redo](report/img/no_redo.png)|
-
-## Web page link
-
-[https://ss-assignment1-16e1b.web.app](https://ss-assignment1-16e1b.web.app)
 
 ## Brief Implementation description
 
