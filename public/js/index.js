@@ -275,7 +275,7 @@ function loadHtmlElements() {
         tri_counter.set(e.id, { act: "none", sp: "void" });
         shape_container.set(e.id, new MultipleShape(l.getElementsByTagName('img'), 2));
     });
-    font.onchange = () => { font.value; };
+    font.onchange = () => { font.value; }; // make selector load selected value
     // initialize mutex for input text
     mutex = new Mutex.Mutex();
 }
@@ -490,10 +490,11 @@ function drawUp() {
         board.stroke(); // draw
     }
 }
-function afterDraw() {
+function afterDraw(shot) {
     drawing = false;
     board.beginPath();
-    screenshot.shot();
+    if (shot)
+        screenshot.shot();
 }
 /**
  * Will invoke afterDraw() after lost input focus
@@ -507,11 +508,12 @@ function setupTextInput(ev) {
     input.style.left = `${ev.pageX}px`;
     input.style.top = `${ev.pageY}px`;
     const check_and_destroy = () => {
-        if (input.value != null && input.value !== '') {
+        let should_shot = input.value != null && input.value !== '';
+        if (should_shot) {
             beforeDraw();
             board.fillText(input.value, start_x, start_y);
         }
-        afterDraw();
+        afterDraw(should_shot);
         document.body.removeChild(input);
         mutex.unlock(); // unlock after destroy element
     };
@@ -554,7 +556,7 @@ function canvasSetup() {
         }
         if (mode != textbox.id || !mutex.lock()) {
             drawUp();
-            afterDraw();
+            afterDraw(true);
         }
         else {
             setupTextInput(ev);

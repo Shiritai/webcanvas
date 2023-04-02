@@ -572,10 +572,11 @@ function drawUp(): void {
     }
 }
 
-function afterDraw(): void {
+function afterDraw(shot: boolean): void {
     drawing = false;
     board.beginPath();
-    screenshot.shot();
+    if (shot)
+        screenshot.shot();
 }
 
 /**
@@ -591,11 +592,12 @@ function setupTextInput(ev: MouseEvent): void {
     input.style.top = `${ev.pageY}px`;
 
     const check_and_destroy = () => {
-        if (input.value != null && input.value !== '') {
+        let should_shot = input.value != null && input.value !== '';
+        if (should_shot) {
             beforeDraw();
             board.fillText(input.value, start_x, start_y);
         }
-        afterDraw();
+        afterDraw(should_shot);
         document.body.removeChild(input);
         mutex.unlock(); // unlock after destroy element
     };
@@ -642,7 +644,7 @@ function canvasSetup(): void {
         }
         if (mode != textbox.id || !mutex.lock()) {
             drawUp();
-            afterDraw();
+            afterDraw(true);
         } else {
             setupTextInput(ev);
         }
