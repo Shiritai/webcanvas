@@ -429,6 +429,7 @@ function beforeDraw() {
 function drawScratch(ev) {
     // cancel possible erase mode
     board.globalCompositeOperation = "source-over";
+    board.lineJoin = 'miter'; // default curve behavior
     let cur_x = ev.pageX - canvas.offsetLeft, cur_y = ev.pageY - canvas.offsetTop;
     switch (mode) {
         case eraser.id:
@@ -462,6 +463,7 @@ function drawScratch(ev) {
                     board.arc((cur_x + start_x) / 2, (cur_y + start_y) / 2, radius, 0, 2 * Math.PI);
                     break;
                 case triangle.id:
+                    board.lineJoin = 'round'; // better curve behavior for triangle
                     board.moveTo(cur_x, cur_y);
                     board.lineTo(start_x, cur_y);
                     board.lineTo((cur_x + start_x) / 2, start_y);
