@@ -106,13 +106,17 @@ graph LR;
     圓形的繪製可參考下圖 (p.s. 正是以此繪圖網頁繪製而成)。
     ![image](./report/img/circle.png)
     由上圖，半徑可以用下式計算。
+    
     $$
     radius =  \sqrt{\Big(\dfrac{cur\_x - start\_x}{2}\Big)^2 + \Big(\dfrac{cur\_y - start\_y}{2}\Big)^2}
     $$
+    
     另外圓心的計算為以下。
+
     $$
     center = \dfrac{start + cur}{2}
     $$
+    
     並以 `board::arc` 設定之，接著透過之前介紹的流程完成繪製。於 `drawUp` 繪製時，由 `tri_counter` 映射物件紀錄繪製實心與否的訊息來決定應該呼叫 `board::fill` 或者 `board::stroke` 方法。
 * triangle (void, solid)
     三角形的輪廓設定與直線同理，只是座標稍作調整。而實心與否的控制也同圓形，以 `tri_counter`
@@ -155,9 +159,3 @@ graph LR;
 ### Others (Optional)
 
 本 Lab 中熟悉 JavaScript/TypeScript 的各式進階語法、DOM 的操作，並應用資料結構與作業系統所學的知識，在滿足許多功能的情況下維持程式碼易讀好懂的架構，確實獲益良多，不過處理 edge case，思考、設計並實作解決辦法還真是費時...
-
-<style>
-table th{
-    width: 100%;
-}
-</style>
