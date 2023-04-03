@@ -93,35 +93,51 @@ graph LR;
 可見本實作並沒有獨立針對某物件的函式，如此達到盡可能不撰寫多餘的程式碼，即相同的邏輯不用不斷重寫。以下我將針對不同工具，概述實現的核心方法。
 
 * pencil
+
     於 `drawScratch` 中使用 `board::lineTo` 決定繪圖點，並在 `drawUp` 正式以 `board::stroke` 方法繪圖。
+
 * eraser
+
     近乎等同 pencil，於 `drawScratch` 中使用 `board::lineTo` 決定繪圖點，並在 `drawUp` 正式以 `board::stroke` 方法繪圖。差別在設定 `board::globalCompositeOperation` 為 "destination-out" 以開啟清除模式。
 * textbox
+
     較特別，非與打字同步的方式繪製，而是先建立一 `<input>` 蒐集文字輸入，之後刪除該 `<input>`，並將文字以 `board::fillText` 的方式繪製。注意由於此操作發生在按下 `Enter` 或游標移開輸入方格時，故應該在這兩種情況發生時呼叫 `beforeDraw`  和 `afterDraw`，對此我以 `check_and_destroy` 函子完成實作。
+
     另一特點是，textbox 若在畫布上滿滿都是，或者使用者點按的差池，本來都會導致產生多個懸空 `<input>`，使畫面變得很可怕。對此，我設計、實作並使用 `Mutex.Mutex` 物件，完成「建立 `<input>`」的互斥鎖邏輯。
+
 以下四者我使用「暫存舊圖」的方式完成實作。由於滑鼠移動時應該動態調整繪製出的物件，本實作於開始移動前將畫面暫存，繪製時不斷倒退回移動前的畫面狀態，同時根據當前滑鼠位置繪製物件。具體描述如下。
+
 * line
+
     直線的繪製為根據點擊時紀錄的座標 `start_x, start_y` 以及當前坐標 `cur_x, cur_y` 決定。前者決定起點 (`board::moveTo`)，後者決定終點 (`board::lineTo`)。
+
 * circle (void, solid)
+
     圓形的繪製可參考下圖 (p.s. 正是以此繪圖網頁繪製而成)。
+
     ![image](./report/img/circle.png)
+
     由上圖，半徑可以用下式計算。
-    
+
     $$
     radius =  \sqrt{\Big(\dfrac{cur\_x - start\_x}{2}\Big)^2 + \Big(\dfrac{cur\_y - start\_y}{2}\Big)^2}
     $$
-    
+
     另外圓心的計算為以下。
 
     $$
     center = \dfrac{start + cur}{2}
     $$
-    
+
     並以 `board::arc` 設定之，接著透過之前介紹的流程完成繪製。於 `drawUp` 繪製時，由 `tri_counter` 映射物件紀錄繪製實心與否的訊息來決定應該呼叫 `board::fill` 或者 `board::stroke` 方法。
+
 * triangle (void, solid)
+
     三角形的輪廓設定與直線同理，只是座標稍作調整。而實心與否的控制也同圓形，以 `tri_counter`
  物件的紀錄決定繪製方法。
+
 * rectangle (void, solid)
+
     使用 `board::rect` 方法生成方形輪廓，之後與三角形和圓形同理。
 
 ### Implementation of functional tools
@@ -135,10 +151,15 @@ graph LR;
 以下簡介做法:
 
 * undo
+
     若可以，降低 stack top `Screenshot::cur` 並更新 `board`，讓接下來存取之物件為前一筆的資料。
+    
 * redo
+
     若可以，提升 stack top `Screenshot::cur` 並更新 `board`，讓接下來存取之物件為後一筆的資料。
+
 * reset
+
     初始化所有物件，並將當前空白畫面截圖。
 
 如此一來，undo, redo 和 reset 的實作就僅剩一步之遙，細節省略。
@@ -148,12 +169,19 @@ graph LR;
 包含滑鼠設定、筆刷大小、透明度、顏色選擇器、文字設定和 offcanvas。
 
 * 滑鼠的設定
+
     切換 html element 的 `class` 搭配 `css` 來完成。這種做法有助於降低讀取檔案的性能開銷。在設定為某一圖標前，將舊的圖標對應之 `class` 全數清除，以 `resetCanvasMouseIcon` 函式實作。其中圓、三角和方形的切換透過前面提到的 `tri_counter` 這個映射與當前狀態兩者合力完成，可見於 `setOnclickEvent` 函式。
+
 * 筆刷大小、透明度、顏色選擇器
+
     這三者有異曲同工之妙，都透過讀取前端滑桿所擁有的 `HTMLInputElement::value` 成員來獲得所求值。另注意到這些變化會實時反映到該滑桿旁的 label 上，這是透過設定 `onmousemove` 和 `onmouseup` 完成。
+
 * 文字設定
+
     採用 `<select>` 搭配 `board::font` 於 beforeDraw` 時設置完成。
+
 * Offcanvas
+
     為 Bootstrap 5 的新元素，能顯示側邊欄與對應元素。我以此為基礎，左為顏色設定，右為字型設定。依照[官網](https://getbootstrap.com/docs/5.3/components/offcanvas/)，側邊欄的顯示與否為調整 Offcanvas 之 `class` 完成，故我設計 `offcanvas_move` 輔助函式，搭配當前狀態的紀錄，完成其顯示與隱藏的功能。
 
 ### Others (Optional)
