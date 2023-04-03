@@ -270,7 +270,7 @@ function offcanvas_move(of: HTMLDivElement, move: boolean): void {
 
 var mode: string;
 var shape_container: Map<string, MultipleShape>;
-// false: *_void, true: *_solid
+
 type ShapeStatus = { act: "none" | "activate", sp: "void" | "solid" };
 var tri_counter: Map<string, ShapeStatus>;
 
@@ -478,8 +478,6 @@ function setOnclickEvent(): void {
 
 /**
  * Initialize drawing: collect initial values
- * @param pageX page x coordinate
- * @param pageY page y coordinate
  */
 function initDraw(ev: MouseEvent): void {
     if (!drawing) {
@@ -505,8 +503,6 @@ function beforeDraw(): void {
 
 /**
  * Draw a scratch (prepare to draw) by setting up our board
- * @param pageX current page x coordinate
- * @param pageY current page y coordinate
  */
 function drawScratch(ev: MouseEvent): void {
     // cancel possible erase mode
@@ -583,8 +579,6 @@ function afterDraw(shot: boolean): void {
 
 /**
  * Will invoke afterDraw() after lost input focus
- * @param pageX page x coordinate
- * @param pageY page y coordinate
  */
 function setupTextInput(ev: MouseEvent): void {
     let input = document.createElement('input');

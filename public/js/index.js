@@ -398,8 +398,6 @@ function setOnclickEvent() {
 }
 /**
  * Initialize drawing: collect initial values
- * @param pageX page x coordinate
- * @param pageY page y coordinate
  */
 function initDraw(ev) {
     if (!drawing) {
@@ -423,8 +421,6 @@ function beforeDraw() {
 }
 /**
  * Draw a scratch (prepare to draw) by setting up our board
- * @param pageX current page x coordinate
- * @param pageY current page y coordinate
  */
 function drawScratch(ev) {
     // cancel possible erase mode
@@ -500,8 +496,6 @@ function afterDraw(shot) {
 }
 /**
  * Will invoke afterDraw() after lost input focus
- * @param pageX page x coordinate
- * @param pageY page y coordinate
  */
 function setupTextInput(ev) {
     let input = document.createElement('input');
